@@ -1,0 +1,84 @@
+<%- include('../layout', { title: '用户注册' }) %>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-lg border-0 rounded-lg mt-5">
+      <div class="card-header bg-primary text-white text-center">
+        <h3 class="my-2"><i class="fas fa-user-plus mr-2"></i> 用户注册</h3>
+      </div>
+      <div class="card-body">
+        <form action="/auth/register" method="POST">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="username" class="form-label">用户名</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user"></i></span>
+                  <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="email" class="form-label">电子邮箱</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="password" class="form-label">密码</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                  <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="confirmPassword" class="form-label">确认密码</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="department" class="form-label">所属部门</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-building"></i></span>
+                  <input type="text" class="form-control" id="department" name="department" required>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="role" class="form-label">用户角色</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-user-shield"></i></span>
+                  <select class="form-control" id="role" name="role">
+                    <option value="user">普通用户</option>
+                    <option value="manager">部门管理员</option>
+                    <option value="admin">系统管理员</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fas fa-user-plus mr-2"></i> 创建用户
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

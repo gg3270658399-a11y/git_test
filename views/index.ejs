@@ -1,0 +1,93 @@
+<%- include('layout', { title: '首页' }) %>
+
+<div class="hero-section bg-gradient-to-r from-primary to-info text-white text-center py-12">
+  <div class="container">
+    <h1 class="display-4 mb-4">广东药科大学内控管理信息系统</h1>
+    <p class="lead mb-6">高效、规范、智能的内部控制管理平台，助力学校管理水平提升</p>
+    <% if (!user) { %>
+      <a href="/auth/login" class="btn btn-lg btn-light text-primary">
+        <i class="fas fa-sign-in-alt mr-2"></i> 立即登录
+      </a>
+    <% } else { %>
+      <a href="/dashboard" class="btn btn-lg btn-light text-primary">
+        <i class="fas fa-tachometer-alt mr-2"></i> 进入仪表盘
+      </a>
+    <% } %>
+  </div>
+</div>
+
+<div class="container mt-10">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center">
+          <div class="text-primary mb-4">
+            <i class="fas fa-shield-alt fa-4x"></i>
+          </div>
+          <h3 class="card-title">全面风险管控</h3>
+          <p class="card-text">建立健全内部控制体系，全面识别、评估和管控各类风险，保障学校资产安全。</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center">
+          <div class="text-info mb-4">
+            <i class="fas fa-sitemap fa-4x"></i>
+          </div>
+          <h3 class="card-title">流程规范管理</h3>
+          <p class="card-text">标准化业务流程，明确责任分工，确保各项工作有章可循、有据可依，提高管理效率。</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center">
+          <div class="text-success mb-4">
+            <i class="fas fa-chart-line fa-4x"></i>
+          </div>
+          <h3 class="card-title">实时监控分析</h3>
+          <p class="card-text">实时监控内控执行情况，提供数据统计和分析报表，支持管理决策。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 bg-light p-6 rounded-lg">
+    <h2 class="text-center mb-6">系统功能模块</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <i class="fas fa-check-circle text-success mr-2"></i>
+            <strong>控制点管理</strong>：建立、编辑、删除和查询各类内控控制点
+          </li>
+          <li class="list-group-item">
+            <i class="fas fa-check-circle text-success mr-2"></i>
+            <strong>风险管理</strong>：风险识别、评估、应对策略制定和监控
+          </li>
+          <li class="list-group-item">
+            <i class="fas fa-check-circle text-success mr-2"></i>
+            <strong>流程管理</strong>：业务流程梳理、标准化和优化
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <i class="fas fa-check-circle text-success mr-2"></i>
+            <strong>权限管理</strong>：基于角色的访问控制，确保数据安全
+          </li>
+          <li class="list-group-item">
+            <i class="fas fa-check-circle text-success mr-2"></i>
+            <strong>审计日志</strong>：记录系统操作，提供追溯依据
+          </li>
+          <li class="list-group-item">
+            <i class="fas fa-check-circle text-success mr-2"></i>
+            <strong>报表统计</strong>：生成各类统计分析报表
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

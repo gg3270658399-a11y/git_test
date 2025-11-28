@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>广东药科大学内控管理信息系统 - <%= title || '首页' %></title>
+  <!-- 引入Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- 引入Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- 自定义样式 -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-shield-alt"></i> 广东药科大学内控管理信息系统
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <% if (user) { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard">
+                <i class="fas fa-tachometer-alt"></i> 仪表盘
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/control">
+                <i class="fas fa-check-circle"></i> 控制点管理
+              </a>
+            </li>
+            <% if (user.role === 'admin') { %>
+              <li class="nav-item">
+                <a class="nav-link" href="/users">
+                  <i class="fas fa-users-cog"></i> 用户管理
+                </a>
+              </li>
+            <% } %>
+          <% } %>
+        </ul>
+        <ul class="navbar-nav">
+          <% if (user) { %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                <i class="fas fa-user"></i> <%= user.username %> (<%= user.department %>)
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/users/profile"><i class="fas fa-user-cog"></i> 个人资料</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/auth/logout"><i class="fas fa-sign-out-alt"></i> 退出登录</a></li>
+              </ul>
+            </li>
+          <% } else { %>
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/login"><i class="fas fa-sign-in-alt"></i> 登录</a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主内容区域 -->
+  <div class="container mt-4">
+    <!-- 消息提示 -->
+    <% if (messages && messages.success) { %>
+      <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle"></i> <%= messages.success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (messages && messages.error) { %>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle"></i> <%= messages.error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (error) { %>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle"></i> <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <!-- 页面内容 -->
+    <%- body %>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="bg-light text-center text-lg-start mt-5">
+    <div class="container p-4">
+      <div class="text-center p-3">
+        © 2023 广东药科大学内控管理信息系统 - 版权所有
+      </div>
+    </div>
+  </footer>
+
+  <!-- 引入Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- 自定义脚本 -->
+  <script src="/js/main.js"></script>
+</body>
+</html>

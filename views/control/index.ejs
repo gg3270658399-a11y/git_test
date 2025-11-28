@@ -1,0 +1,174 @@
+<%- include('../layout', { title: '控制点管理' }) %>
+
+<div class="mb-4">
+  <h2 class="text-primary"><i class="fas fa-check-circle mr-2"></i> 控制点管理</h2>
+  <p class="text-muted">管理和监控各类内部控制点</p>
+</div>
+
+<!-- 添加按钮 -->
+<% if (user.role === 'admin' || user.role === 'manager') { %>
+  <div class="mb-4">
+    <a href="/control/add" class="btn btn-primary">
+      <i class="fas fa-plus mr-2"></i> 添加控制点
+    </a>
+  </div>
+<% } %>
+
+<!-- 筛选条件 -->
+<div class="card mb-4 shadow-sm">
+  <div class="card-body">
+    <form action="/control" method="GET">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="category">控制点类别</label>
+            <select class="form-control" id="category" name="category">
+              <option value="">全部类别</option>
+              <% categories.forEach(category => { %>
+                <option value="<%= category %>" <%= filters.category === category ? 'selected' : '' %>>
+                  <%= category %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="risk_level">风险等级</label>
+            <select class="form-control" id="risk_level" name="risk_level">
+              <option value="">全部等级</option>
+              <option value="高" <%= filters.risk_level === '高' ? 'selected' : '' %>>高</option>
+              <option value="中" <%= filters.risk_level === '中' ? 'selected' : '' %>>中</option>
+              <option value="低" <%= filters.risk_level === '低' ? 'selected' : '' %>>低</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="status">状态</label>
+            <select class="form-control" id="status" name="status">
+              <option value="">全部状态</option>
+              <option value="有效" <%= filters.status === '有效' ? 'selected' : '' %>>有效</option>
+              <option value="待更新" <%= filters.status === '待更新' ? 'selected' : '' %>>待更新</option>
+              <option value="已过期" <%= filters.status === '已过期' ? 'selected' : '' %>>已过期</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-filter mr-2"></i> 筛选
+          </button>
+          <a href="/control" class="btn btn-secondary ml-2">
+            <i class="fas fa-sync-alt mr-2"></i> 重置
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 控制点列表 -->
+<div class="card shadow-sm">
+  <div class="card-body">
+    <% if (controlPoints.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>名称</th>
+              <th>类别</th>
+              <th>风险等级</th>
+              <th>责任部门</th>
+              <th>负责人</th>
+              <th>状态</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% controlPoints.forEach(point => { %>
+              <tr>
+                <td><a href="/control/view/<%= point._id %>"><%= point.name %></a></td>
+                <td><%= point.category %></td>
+                <td>
+                  <span class="badge 
+                    <%= point.risk_level === '高' ? 'bg-danger' : 
+                       point.risk_level === '中' ? 'bg-warning' : 'bg-success' %>">
+                    <%= point.risk_level %>
+                  </span>
+                </td>
+                <td><%= point.responsible_department %></td>
+                <td><%= point.responsible_person ? point.responsible_person.username : '未分配' %></td>
+                <td>
+                  <span class="badge 
+                    <%= point.status === '有效' ? 'bg-success' : 
+                       point.status === '待更新' ? 'bg-warning' : 'bg-danger' %>">
+                    <%= point.status %>
+                  </span>
+                </td>
+                <td><%= new Date(point.created_at).toLocaleString() %></td>
+                <td>
+                  <a href="/control/view/<%= point._id %>" class="btn btn-sm btn-info mr-1">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <% if (user.role === 'admin' || user.role === 'manager') { %>
+                    <a href="/control/edit/<%= point._id %>" class="btn btn-sm btn-primary mr-1">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="<%= point._id %>">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="text-center py-5">
+        <p class="text-muted">暂无控制点数据</p>
+        <% if (user.role === 'admin' || user.role === 'manager') { %>
+          <a href="/control/add" class="btn btn-primary mt-2">
+            <i class="fas fa-plus mr-2"></i> 添加第一个控制点
+          </a>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">确认删除</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>确定要删除这个控制点吗？此操作不可恢复。</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <form id="deleteForm" action="" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-danger">删除</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 删除按钮事件处理
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
+      document.getElementById('deleteForm').setAttribute('action', `/control/delete/${id}`);
+      const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      deleteModal.show();
+    });
+  });
+</script>

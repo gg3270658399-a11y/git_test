@@ -1,0 +1,53 @@
+# 依赖目录
+node_modules/
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 日志文件
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 编辑器目录和文件
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 操作系统文件
+Thumbs.db
+.DS_Store
+
+# 测试覆盖率
+coverage/
+*.lcov
+.nyc_output
+
+# 构建输出
+build/
+dist/
+
+# 临时文件
+*.tmp
+*.temp
+.cache/
+
+# 其他
+*.pem
+.eslintcache
+.stylelintcache
+
+# 数据库备份
+*.bak
+*.backup
+
+# 包管理锁文件（可选，根据团队习惯）
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

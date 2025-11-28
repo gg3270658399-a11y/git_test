@@ -1,0 +1,162 @@
+<%- include('layout', { title: '仪表盘' }) %>
+
+<div class="mb-4">
+  <h2 class="text-primary"><i class="fas fa-tachometer-alt mr-2"></i> 仪表盘</h2>
+  <p class="text-muted">欢迎回来，<%= user.username %>！这是您的内控管理概览。</p>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row mb-6">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white shadow-sm">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <h3 class="card-title">总控制点</h3>
+            <p class="card-text display-4"><%= statistics.total %></p>
+          </div>
+          <div class="col text-right">
+            <i class="fas fa-check-circle fa-4x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-danger text-white shadow-sm">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <h3 class="card-title">高风险点</h3>
+            <p class="card-text display-4"><%= statistics.highRisk %></p>
+          </div>
+          <div class="col text-right">
+            <i class="fas fa-exclamation-triangle fa-4x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-warning text-white shadow-sm">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <h3 class="card-title">中风险点</h3>
+            <p class="card-text display-4"><%= statistics.mediumRisk %></p>
+          </div>
+          <div class="col text-right">
+            <i class="fas fa-exclamation-circle fa-4x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success text-white shadow-sm">
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <h3 class="card-title">低风险点</h3>
+            <p class="card-text display-4"><%= statistics.lowRisk %></p>
+          </div>
+          <div class="col text-right">
+            <i class="fas fa-info-circle fa-4x opacity-50"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 警告卡片 -->
+<% if (statistics.expired > 0) { %>
+  <div class="alert alert-warning mb-6">
+    <i class="fas fa-exclamation-circle mr-2"></i>
+    有 <%= statistics.expired %> 个控制点已过期，请及时更新！
+  </div>
+<% } %>
+
+<!-- 最近活动 -->
+<div class="row">
+  <!-- 最近控制点 -->
+  <div class="col-md-6 mb-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        <h4 class="card-title mb-0">
+          <i class="fas fa-list-alt mr-2"></i> 最近控制点
+          <a href="/control" class="btn btn-sm btn-primary float-right">查看全部</a>
+        </h4>
+      </div>
+      <div class="card-body">
+        <% if (recentPoints.length > 0) { %>
+          <table class="table table-hover table-sm">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th>类别</th>
+                <th>风险等级</th>
+                <th>负责人</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% recentPoints.forEach(point => { %>
+                <tr>
+                  <td><a href="/control/view/<%= point._id %>"><%= point.name %></a></td>
+                  <td><%= point.category %></td>
+                  <td>
+                    <span class="badge 
+                      <%= point.risk_level === '高' ? 'bg-danger' : 
+                         point.risk_level === '中' ? 'bg-warning' : 'bg-success' %>">
+                      <%= point.risk_level %>
+                    </span>
+                  </td>
+                  <td><%= point.responsible_person ? point.responsible_person.username : '未分配' %></td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <p class="text-center text-muted">暂无控制点数据</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 最近操作日志 -->
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        <h4 class="card-title mb-0">
+          <i class="fas fa-history mr-2"></i> 系统操作日志
+        </h4>
+      </div>
+      <div class="card-body">
+        <% if (recentLogs.length > 0) { %>
+          <ul class="list-group">
+            <% recentLogs.forEach(log => { %>
+              <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <strong><%= log.user ? log.user.username : '未知用户' %></strong> 
+                    <%= log.action %>
+                    <span class="text-muted text-sm">(<%= log.resource_type %>)</span>
+                  </div>
+                  <span class="text-muted text-sm"><%= new Date(log.timestamp).toLocaleString() %></span>
+                </div>
+                <% if (log.details && typeof log.details === 'object') { %>
+                  <small class="text-muted d-block mt-1">
+                    详情: <%= JSON.stringify(log.details).substring(0, 100) %>
+                    <% if (JSON.stringify(log.details).length > 100) { %>...<% } %>
+                  </small>
+                <% } %>
+              </li>
+            <% }); %>
+          </ul>
+        <% } else { %>
+          <p class="text-center text-muted">暂无操作日志</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
